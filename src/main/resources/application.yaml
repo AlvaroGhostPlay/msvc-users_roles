@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: msvc-users_roles
+  datasource:
+    url: jdbc:postgresql://localhost:5432/store-db
+    username: postgres
+    password: sasa
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+server:
+  port: 0
