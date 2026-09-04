@@ -42,6 +42,13 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @PostMapping("/new")
+    public ResponseEntity<?> createUserByBank(@RequestBody UserCreateDto userRequest) {
+        return userService.createUserByBank(userRequest)
+                .map(user -> ResponseEntity.ok(user))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody UserUpdateDto userRequest, @RequestParam UUID id) {
         return userService.updateUserById(userRequest, id)

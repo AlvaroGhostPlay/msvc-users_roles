@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users", schema = "storedb")
-public class User {
+public class  User {
 
     @Id
     private UUID userId;

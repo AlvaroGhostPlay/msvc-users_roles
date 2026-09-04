@@ -8,11 +8,13 @@ import com.example.msvcusers_roles.models.Role;
 import com.example.msvcusers_roles.models.User;
 import com.example.msvcusers_roles.repositories.RoleRepository;
 import com.example.msvcusers_roles.repositories.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -25,6 +27,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public List<UserResponseDto> findAll() {
@@ -51,7 +56,29 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUserId(userRequest.userId());
         user.setUsername(userRequest.username());
-        user.setPassword(userRequest.password());
+        user.setPassword(passwordEncoder.encode(userRequest.password()));
+        user.setCreated(new Date());
+        user.setUpdated(new Date());
+        user.setChangePass(userRequest.changePass());
+        user.setRoles(roles);
+        user.setEnable(userRequest.enable());
+        User userCreated = userRepository.save(user);
+        if (userCreated != null) {
+            return Optional.of(createUserResponseMapper.createUserResponseDto(userCreated));
+        }
+        return Optional.empty();
+    }
+
+    @Transactional
+    @Override
+    public Optional<UserResponseDto> createUserByBank(UserCreateDto userRequest) {
+        Set<Role> roles = new HashSet<>(roleRepository.findByRole("ROLE_USER")
+                .map(role -> Set.of(role)).get());
+
+        User user = new User();
+        user.setUserId(userRequest.userId());
+        user.setUsername(userRequest.username());
+        user.setPassword(passwordEncoder.encode(userRequest.password()));
         user.setCreated(new Date());
         user.setUpdated(new Date());
         user.setChangePass(userRequest.changePass());

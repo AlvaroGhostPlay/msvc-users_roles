@@ -1,12 +1,15 @@
 package com.example.msvcusers_roles.services;
 
 import com.example.msvcusers_roles.models.Role;
+import com.example.msvcusers_roles.models.User;
 import com.example.msvcusers_roles.repositories.RoleRepository;
+import com.example.msvcusers_roles.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
