@@ -1,6 +1,7 @@
 package com.example.msvcusers_roles.controllers;
 
 import com.example.msvcusers_roles.dto.UserCreateDto;
+import com.example.msvcusers_roles.dto.UserPasswordRequestDto;
 import com.example.msvcusers_roles.dto.UserUpdateDto;
 import com.example.msvcusers_roles.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.ok(userService.findAll());
+    }
+
+    @PostMapping("/auth/user")
+    public ResponseEntity<?> authorizationUserByLogin(@RequestBody UserPasswordRequestDto userPasswordRequestDto) {
+        return ResponseEntity.ok(userService.userPasswordValidation(userPasswordRequestDto));
     }
 
     @GetMapping("/{id}")

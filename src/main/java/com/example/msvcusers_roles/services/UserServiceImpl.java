@@ -1,8 +1,6 @@
 package com.example.msvcusers_roles.services;
 
-import com.example.msvcusers_roles.dto.UserCreateDto;
-import com.example.msvcusers_roles.dto.UserResponseDto;
-import com.example.msvcusers_roles.dto.UserUpdateDto;
+import com.example.msvcusers_roles.dto.*;
 import com.example.msvcusers_roles.mapper.CreateUserResponseMapper;
 import com.example.msvcusers_roles.models.Role;
 import com.example.msvcusers_roles.models.User;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -32,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public List<UserResponseDto> findAll() {
         List<User> users = userRepository.findAll();
         return createUserResponseMapper.createUserResponseDtos(users);
@@ -114,5 +112,16 @@ public class UserServiceImpl implements UserService {
         Optional<User> userDb = userRepository.findById(id);
         userDb.ifPresent(userRepository::delete);
         return userDb;
+    }
+
+    @Transactional
+    @Override
+    public UserValidateResponseDto userPasswordValidation(UserPasswordRequestDto userPasswordRequestDto) {
+        Optional<User> userOptional = userRepository.findByUsername(userPasswordRequestDto.username());
+        if (userOptional.isPresent()) {
+            Boolean autenticate = passwordEncoder.matches(userPasswordRequestDto.password(), userOptional.get().getPassword());
+            return this.createUserResponseMapper.createUserValidateResponseDto(userOptional.get(), autenticate);
+        }
+        return null;
     }
 }
