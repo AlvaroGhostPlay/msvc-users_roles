@@ -22,6 +22,7 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll());
     }
 
+
     @PostMapping("/auth/user")
     public ResponseEntity<?> authorizationUserByLogin(@RequestBody UserPasswordRequestDto userPasswordRequestDto) {
         return ResponseEntity.ok(userService.userPasswordValidation(userPasswordRequestDto));

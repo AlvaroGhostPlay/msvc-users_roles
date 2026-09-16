@@ -16,6 +16,12 @@ spring:
       hibernate:
         format_sql: ${JPA_SHOW_FORMAT_SQL}
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_ISSUER}
+
 eureka:
   client:
     service-url:
